@@ -26,4 +26,15 @@ describe SpeechStatistics do
     end
   end
 
+  describe '.speakers_lines_count' do
+    it 'should print count of lines and speakers\'s names' do
+      tag = '//alien'
+      doc = SpeechStatistics.get_xml('Alf.xml')
+      speech = SpeechStatistics.get_tag(tag, doc).xpath(tag)
+      speakers_lines = SpeechStatistics.parse_speech(speech)
+      expect(SpeechStatistics.speakers_lines_count(speakers_lines)).to eq({'Alf'=>'0'})
+      expect { SpeechStatistics.speakers_lines_count(speakers_lines) }.to output("0 Alf\n").to_stdout
+    end
+  end
+
 end

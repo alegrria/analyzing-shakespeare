@@ -21,8 +21,17 @@ class SpeechStatistics
     @speakers_lines
   end
 
+  def self.speakers_lines_count(speakers_lines)
+    count = speakers_lines.reduce({}) do |speakers, lines|
+      speakers.merge(lines) { |_, a, b| a.to_i + b.to_i }
+    end
+    count.each do |speaker|
+      if speaker[0] != 'ALL'
+        puts speaker[1].to_s + ' ' + speaker[0].to_s.downcase.split.map(&:capitalize).join(' ')
+      end
+    end
+  end
+
 end
 
-doc = SpeechStatistics.get_xml('http://www.ibiblio.org/xml/examples/shakespeare/macbeth.xml')
-speech = SpeechStatistics.get_tag('//SPEECH', doc)
-speakers_lines = SpeechStatistics.parse_speech(speech)
+SpeechStatistics.speakers_lines_count(SpeechStatistics.parse_speech(SpeechStatistics.get_tag('//speech', SpeechStatistics.get_xml('http://www.ibiblio.org/xml/examples/shakespeare/macbeth.xml'))))
